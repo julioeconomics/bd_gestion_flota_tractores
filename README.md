@@ -101,3 +101,10 @@ Ranking de conductores por kilómetros recorridos
 Tractores con mayor tiempo fuera de servicio
 
 Costo total de operación por unidad
+
+# DIAGRAMA ENTIDAD / RELACION
+
+![Diagrama Entidad - Relación](https://github.com/user-attachments/assets/d3d6ed65-d02b-493d-ba5b-5df3b404082c)
+
+
+
