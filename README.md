@@ -104,8 +104,6 @@ Costo total de operación por unidad
 
 # DIAGRAMA ENTIDAD / RELACION
 
-![Diagrama Entidad - Relación](https://github.com/user-attachments/assets/873b9878-2110-4b67-8c8d-0ab7eec77401)
-
-
+![image](https://github.com/user-attachments/assets/3425d3a3-82f0-4132-b90c-3590b17a1ae0)
 
 
