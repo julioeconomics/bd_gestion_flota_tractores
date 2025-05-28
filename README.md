@@ -106,4 +106,9 @@ Costo total de operación por unidad
 
 ![image](https://github.com/user-attachments/assets/3425d3a3-82f0-4132-b90c-3590b17a1ae0)
 
+# Modelo Lógico
+
+![image](https://github.com/user-attachments/assets/9edab962-7bf4-4912-abb1-5e22c4ee9c1f)
+
+
 
