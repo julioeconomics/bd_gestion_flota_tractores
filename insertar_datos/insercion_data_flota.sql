@@ -2,7 +2,7 @@ USE bd_gestion_flota_tractores
 GO
 
 -----------------------------------------
------- Inserción de datos en mis tablas
+------ InserciÃ³n de datos en mis tablas
 
 -- Para la tabla SEDES
 SELECT * FROM sedes;
@@ -17,7 +17,7 @@ BEGIN
   VALUES (
     CONCAT('Sede ', @i),
     CONCAT('Ciudad ', @i),
-    CONCAT('Región ', @i),
+    CONCAT('RegiÃ³n ', @i),
     CONCAT('Av. Transporte #', @i * 100),
     'Activo'
   );
@@ -73,7 +73,7 @@ DBCC CHECKIDENT ('asignaciones', RESEED, 0);
 
 GO
 DECLARE @i INT=1;
-WHILE @i <= 10
+WHILE @i <= 20
 BEGIN
   INSERT INTO asignaciones (tractor_id, conductor_id, fecha_inicio, fecha_fin)
   VALUES (
@@ -92,7 +92,7 @@ DBCC CHECKIDENT ('mantenimientos', RESEED, 0);
 
 GO
 DECLARE @i INT = 1;
-WHILE @i <= 10
+WHILE @i <= 20
 BEGIN
   INSERT INTO mantenimientos (tractor_id, tipo, descripcion, frecuencia_km, fecha_mantenimiento, costo_mantenimiento, kilometraje)
   VALUES (
@@ -114,7 +114,7 @@ DBCC CHECKIDENT ('consumo_combustible', RESEED, 0);
 
 GO
 DECLARE @i INT=1;
-WHILE @i <= 10
+WHILE @i <= 20
 BEGIN
   INSERT INTO consumo_combustible (tractor_id, fecha_llenado, litros, costo_combustible, proveedor)
   VALUES (
@@ -134,7 +134,7 @@ DBCC CHECKIDENT ('monitoreo', RESEED, 0);
 
 GO
 DECLARE @i INT = 1;
-WHILE @i <= 10
+WHILE @i <= 20
 BEGIN
   INSERT INTO monitoreo (
     tractor_id, conductor_id, fecha_salida, hora_salida,
@@ -148,7 +148,7 @@ BEGIN
     CAST(DATEADD(MINUTE, CAST(RAND()*180 AS INT), '17:00:00') AS TIME),
     1 + ((@i + 1) % 5),
     1 + (@i % 5),
-    CONCAT('Viaje número ', @i)
+    CONCAT('Viaje nÃºmero ', @i)
   );
   SET @i = @i + 1;
 END
