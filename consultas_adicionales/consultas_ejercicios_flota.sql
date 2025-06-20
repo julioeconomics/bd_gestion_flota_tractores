@@ -5,7 +5,7 @@ GO
 --- Consulta 1
 --- Consulta de consumo mensual de combustible por tractor
 --- OBJETIVO: Obtener el total de litros y costo por tractor agrupado por mes.
---- Permite a la empresa analizar cu·nto combustible se gasta por tractor y mes,
+--- Permite a la empresa analizar cu√°nto combustible se gasta por tractor y mes,
 ---	ayudando a detectar excesos de consumo y planificar presupuestos.
 
 SELECT*FROM consumo_combustible;
@@ -20,8 +20,8 @@ ORDER BY tractor_id, mes;
 
 --- Consulta 2
 --- Vista de historial de mantenimiento por tractor
---- OBJETIVO: Crear una vista que muestre los mantenimientos realizados, con fecha, tipo, descripciÛn y costo.
---- Sirve para auditorÌas tÈcnicas y programaciÛn de mantenimiento preventivo, lo que reduce averÌas.
+--- OBJETIVO: Crear una vista que muestre los mantenimientos realizados, con fecha, tipo, descripci√≥n y costo.
+--- Sirve para auditor√≠as t√©cnicas y programaci√≥n de mantenimiento preventivo, lo que reduce aver√≠as.
 
 
 SELECT*FROM mantenimientos;
@@ -49,16 +49,16 @@ SET tipo = CHOOSE(CAST(RAND(CHECKSUM(NEWID())) * 3 + 1 AS INT), 'Preventivo', 'C
 --- Tambien podemos hacerlo manualmente
 UPDATE mantenimientos
 SET tipo = 'Predictivo'
-WHERE id = 5; -- o cualquier ID especÌfico
+WHERE id = 5; -- o cualquier ID espec√≠fico
 UPDATE mantenimientos
 SET tipo = 'Predictivo'
-WHERE id = 6; -- o cualquier ID especÌfico
+WHERE id = 6; -- o cualquier ID espec√≠fico
 
 
 --- Consulta 3
---- Procedimiento para registrar una nueva asignaciÛn
---- OBJETIVO: Insertar una asignaciÛn de tractor y conductor, validando que no estÈ ya asignado.
---- Evita errores de doble asignaciÛn, que pueden generar problemas logÌsticos o de seguridad.
+--- Procedimiento para registrar una nueva asignaci√≥n
+--- OBJETIVO: Insertar una asignaci√≥n de tractor y conductor, validando que no est√© ya asignado.
+--- Evita errores de doble asignaci√≥n, que pueden generar problemas log√≠sticos o de seguridad.
 
 
 SELECT*FROM asignaciones;
@@ -75,7 +75,7 @@ BEGIN
     WHERE tractor_id = @tractor_id AND fecha_fin IS NULL
   )
   BEGIN
-    RAISERROR('Este tractor ya est· asignado.', 16, 1);
+    RAISERROR('Este tractor ya est√° asignado.', 16, 1);
     RETURN;
   END
 
@@ -90,20 +90,20 @@ EXEC sp_helptext 'sp_registrar_asignacion';
 EXEC sp_registrar_asignacion @tractor_id = 1, @conductor_id = 2, @fecha_inicio = '2025-06-10';
 SELECT * FROM asignaciones;
 
---- Si no ejecuta nada, revisar si no tengo asignaciÛn activa
+--- Si no ejecuta nada, revisar si no tengo asignaci√≥n activa
 SELECT id FROM tractores
 WHERE id NOT IN (
   SELECT tractor_id FROM asignaciones WHERE fecha_fin IS NULL
 );
 
---- Selecciono un tractor sin asignaciÛn y ejecuto el cÛdigo
+--- Selecciono un tractor sin asignaci√≥n y ejecuto el c√≥digo
 EXEC sp_registrar_asignacion @tractor_id = 6, @conductor_id = 7, @fecha_inicio = '2025-06-11';
 EXEC sp_registrar_asignacion @tractor_id = 7, @conductor_id = 7, @fecha_inicio = '2025-06-11';
 SELECT*FROM asignaciones;
 
---- Observo que un mismo conductor esta conduciendo dos tractores en el mismo dÌa.
+--- Observo que un mismo conductor esta conduciendo dos tractores en el mismo d√≠a.
 --- Esto es poco probable en rutas largas.
---- Corregimos el cÛdigo con una segunda validaciÛn
+--- Corregimos el c√≥digo con una segunda validaci√≥n
 GO
 CREATE OR ALTER PROCEDURE sp_registrar_asignacion
   @tractor_id INT,
@@ -111,27 +111,27 @@ CREATE OR ALTER PROCEDURE sp_registrar_asignacion
   @fecha_inicio DATE
 AS
 BEGIN
-  -- Validar si el tractor ya est· asignado
+  -- Validar si el tractor ya est√° asignado
   IF EXISTS (
     SELECT 1 FROM asignaciones
     WHERE tractor_id = @tractor_id AND fecha_fin IS NULL
   )
   BEGIN
-    RAISERROR('Este tractor ya est· asignado.', 16, 1);
+    RAISERROR('Este tractor ya est√° asignado.', 16, 1);
     RETURN;
   END
 
-  -- Validar si el conductor ya est· asignado
+  -- Validar si el conductor ya est√° asignado
   IF EXISTS (
     SELECT 1 FROM asignaciones
     WHERE conductor_id = @conductor_id AND fecha_fin IS NULL
   )
   BEGIN
-    RAISERROR('Este conductor ya est· asignado.', 16, 1);
+    RAISERROR('Este conductor ya est√° asignado.', 16, 1);
     RETURN;
   END
 
-  -- Inserta asignaciÛn v·lida
+  -- Inserta asignaci√≥n v√°lida
   INSERT INTO asignaciones (tractor_id, conductor_id, fecha_inicio, fecha_fin)
   VALUES (@tractor_id, @conductor_id, @fecha_inicio, NULL);
 END;
@@ -147,8 +147,7 @@ SELECT*FROM asignaciones;
 
 
 --- Consulta 4
---- FunciÛn para calcular el promedio de consumo de combustible por tractor (funcion escalar).
---- OBJETIVO: Devolver el promedio de litros consumidos por cada tractor.
+  RETURN COALESCE(@promedio, 0);
 --- Ayuda a medir la eficiencia del combustible en base a su historial.
 
 SELECT*FROM consumo_combustible;
@@ -172,19 +171,19 @@ SELECT dbo.fn_promedio_consumo(1) AS Promedio_Consumo;
 --- Ver los datos utilizados, el tractor 1.
 SELECT * FROM consumo_combustible WHERE tractor_id = 1;
 
---- Si no hay registros, modificar la funciÛn para que salga 0 en vez de NULL.
+--- Si no hay registros, modificar la funci√≥n para que salga 0 en vez de NULL.
 RETURN COALESCE(@promedio, 0);
 
 
 --- Consulta 5
---- Consulta de conductores activos sin asignaciÛn actual
---- OBJETIVO: Listar conductores activos que no est·n asignados a ning˙n tractor en este momento.
+--- Consulta de conductores activos sin asignaci√≥n actual
+--- OBJETIVO: Listar conductores activos que no est√°n asignados a ning√∫n tractor en este momento.
 --- Optimiza el uso del recurso humano y evita inactividad innecesaria.
 
 SELECT*FROM asignaciones;
 SELECT*FROM conductores;
 
---- Selecciono los conductores sin asignaciÛn de trasnporte en estado "Activo"
+--- Selecciono los conductores sin asignaci√≥n de trasnporte en estado "Activo"
 SELECT c.id, c.nombre
 FROM conductores c
 WHERE c.estado = 'Activo'
@@ -195,9 +194,9 @@ AND c.id NOT IN (
 );
 
 --- Consulta 6
---- Vista de monitoreo de viajes con duraciÛn estimada
---- OBJETIVO: Mostrar duraciÛn de viajes en horas, con detalle de sedes y observaciones.
---- Facilita el control logÌstico y tiempos de entrega entre sedes.
+--- Vista de monitoreo de viajes con duraci√≥n estimada
+--- OBJETIVO: Mostrar duraci√≥n de viajes en horas, con detalle de sedes y observaciones.
+--- Facilita el control log√≠stico y tiempos de entrega entre sedes.
 
 SELECT*FROM monitoreo;
 
@@ -227,14 +226,14 @@ JOIN sedes s2 ON m.sede_destino_id = s2.id;
 GO
 SELECT*FROM vw_viajes_con_duracion;
 
---- Para ver tractores especÌficos usar
+--- Para ver tractores espec√≠ficos usar
 SELECT * FROM vw_viajes_con_duracion WHERE placa = 'TR002';
 SELECT * FROM vw_viajes_con_duracion WHERE placa = 'TR001';
 
 
 --- Consulta 7
---- Procedimiento para cerrar una asignaciÛn activa
---- OBJETIVO: Actualizar una asignaciÛn activa para establecer su fecha de fin.
+--- Procedimiento para cerrar una asignaci√≥n activa
+--- OBJETIVO: Actualizar una asignaci√≥n activa para establecer su fecha de fin.
 --- Mantiene el historial actualizado y permite liberar tractores para nuevas asignaciones.
 
 SELECT*FROM asignaciones;
@@ -273,7 +272,7 @@ END;
 
 SELECT*FROM asignaciones;
 
---- Ejecuto el procedimiento creado y me permite cerrar una asignaciÛn, cuando un conductor termina su ruta, es decir, puedo utilizar otro tractor.
+--- Ejecuto el procedimiento creado y me permite cerrar una asignaci√≥n, cuando un conductor termina su ruta, es decir, puedo utilizar otro tractor.
 EXEC sp_cerrar_asignacion @asignacion_id = 10, @fecha_fin = '2025-06-09';
 EXEC sp_cerrar_asignacion @asignacion_id = 19, @fecha_fin = '2025-06-09';
 
